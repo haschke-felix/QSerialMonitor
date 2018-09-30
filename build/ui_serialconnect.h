@@ -29,6 +29,7 @@ public:
     QVBoxLayout *verticalLayout;
     QTreeWidget *treeWidget;
     QHBoxLayout *horizontalLayout;
+    QPushButton *pushButtonUpdate;
     QSpacerItem *horizontalSpacer;
     QPushButton *pushButtonCancel;
     QPushButton *pushButtonConnect;
@@ -47,6 +48,11 @@ public:
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        pushButtonUpdate = new QPushButton(SerialConnect);
+        pushButtonUpdate->setObjectName(QStringLiteral("pushButtonUpdate"));
+
+        horizontalLayout->addWidget(pushButtonUpdate);
+
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
@@ -77,6 +83,10 @@ public:
         ___qtreewidgetitem->setText(2, QApplication::translate("SerialConnect", "Manufacture", Q_NULLPTR));
         ___qtreewidgetitem->setText(1, QApplication::translate("SerialConnect", "Description", Q_NULLPTR));
         ___qtreewidgetitem->setText(0, QApplication::translate("SerialConnect", "Name", Q_NULLPTR));
+        pushButtonUpdate->setText(QApplication::translate("SerialConnect", "Update", Q_NULLPTR));
+#ifndef QT_NO_SHORTCUT
+        pushButtonUpdate->setShortcut(QApplication::translate("SerialConnect", "F5", Q_NULLPTR));
+#endif // QT_NO_SHORTCUT
         pushButtonCancel->setText(QApplication::translate("SerialConnect", "Cancel", Q_NULLPTR));
         pushButtonConnect->setText(QApplication::translate("SerialConnect", "Connect", Q_NULLPTR));
     } // retranslateUi

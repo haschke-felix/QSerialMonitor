@@ -22,8 +22,15 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->checkBox_button->setFocusPolicy(Qt::NoFocus);
 	ui->label->setAutoFillBackground(true);
 
+	serial.setBaudRate(QSerialPort::Baud9600);
+	serial.setDataBits(QSerialPort::Data8);
+	serial.setParity(QSerialPort::NoParity);
+	serial.setStopBits(QSerialPort::OneStop);
+	serial.setFlowControl(QSerialPort::NoFlowControl);
+
 	onUnconnected();
 	serialConnect();
+
 
 	connect(&serial,SIGNAL(readyRead()),this,SLOT(SerialReceived()));
 	connect(ui->lineEdit,SIGNAL(returnPressed()),this,SLOT(onTransmitt()));
@@ -32,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->pushButton_connect,SIGNAL(clicked(bool)),this,SLOT(serialConnect()));
 	connect(ui->pushButton_disconnect,SIGNAL(clicked(bool)),this,SLOT(onDisconnect()));
 	connect(ui->pushButton_clear,SIGNAL(clicked(bool)),this,SLOT(onClear()));
+	connect(&serial,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(onSerialError(QSerialPort::SerialPortError)));
 
 	onLED_changed(false);
 	ui->checkBox_led->setChecked(false);
@@ -65,6 +73,8 @@ void MainWindow::SerialReceived(){
 
 void MainWindow::onTransmitt()
 {
+	if(!serial.isOpen() || !serial.isWritable())
+		return;
 	QString str	= ui->lineEdit->text();
 	ui->lineEdit->clear();
 	str.append('\n');
@@ -73,6 +83,8 @@ void MainWindow::onTransmitt()
 
 void MainWindow::onLED_changed(bool state)
 {
+	if(!serial.isOpen() || !serial.isWritable())
+		return;
 	serial.write((state?"ON\n":"OFF\n"));
 }
 
@@ -83,45 +95,52 @@ void MainWindow::onClear()
 
 void MainWindow::serialConnect()
 {
+	static bool useable = true;
+	if(!useable)
+		return;
+	useable = false;
 	SerialConnect serc;
 	serc.exec();
 	QString str = serc.getPortName();
 	if(str.isEmpty()){
-		if(!serial.isOpen()){
-			onConnected();
+		useable = true;
+		if(serial.isOpen() && serial.isWritable()){
+			return;
 		}
+		if(serial.isOpen())
+			serial.close();
+		onUnconnected();
 		return;
 	}
-	if(serial.isOpen()){
+	if(serial.isOpen() && serial.isWritable()){
 		if(str ==  serial.portName()){
+			useable = true;
 			return;
 		}
 		serial.close();
 	}
 	serial.setPortName(str);
-	serial.setBaudRate(QSerialPort::Baud9600);
-	serial.setDataBits(QSerialPort::Data8);
-	serial.setParity(QSerialPort::NoParity);
-	serial.setStopBits(QSerialPort::OneStop);
-	serial.setFlowControl(QSerialPort::NoFlowControl);
 	if (!serial.open(QIODevice::ReadWrite)){
 		qDebug() << "no access to port";
-		QMessageBox box; //((QMessageBox::Critical, QString("Port not available"),QString("port %1 not available").arg(serial.portName()),QMessageBox::Retry | QMessageBox::Ok, btn);
+		QMessageBox box;
 		box.setText(tr("port %1 not available").arg(serial.portName()));
 		box.setWindowTitle(tr("Port not available"));
 		box.setIcon(QMessageBox::Critical);
-		box.addButton(tr("Cancel"),QMessageBox::DestructiveRole);
+		box.addButton(tr("Cancel"),QMessageBox::NoRole);
 		QAbstractButton * retry	= box.addButton(tr("Retry"),QMessageBox::ActionRole);
 		box.exec();
 		if(box.clickedButton() == retry){
+			useable = true;
 			serialConnect();
 			return;
 		}
 		else{
 			onUnconnected();
+			useable = true;
 			return;
 		}
 	}
+	useable = true;
 	onConnected();
 }
 
@@ -152,4 +171,25 @@ void MainWindow::onUnconnected()
 	QPalette palette = ui->label->palette();
 	palette.setColor(ui->label->backgroundRole(),  QColor(Qt::red).light(120));
 	ui->label->setPalette(palette);
+}
+
+void MainWindow::onSerialError(QSerialPort::SerialPortError error)
+{
+	qDebug() << error;
+	onDisconnect();
+	if(error & QSerialPort::ResourceError){
+		if(serial.isOpen())
+			serial.close();
+		QMessageBox box; //((QMessageBox::Critical, QString("Port not available"),QString("port %1 not available").arg(serial.portName()),QMessageBox::Retry | QMessageBox::Ok, btn);
+		box.setText(tr("An Error occured.\nport %1 not availale, device has been removed").arg(serial.portName()));
+		box.setWindowTitle(tr("Port not available"));
+		box.setIcon(QMessageBox::Critical);
+		box.addButton(tr("Cancel"),QMessageBox::DestructiveRole);
+		QAbstractButton * reconnect	= box.addButton(tr("Reconnect"),QMessageBox::ActionRole);
+		box.exec();
+		if(box.clickedButton() == reconnect){
+			serialConnect();
+		}
+	}
+	return;
 }

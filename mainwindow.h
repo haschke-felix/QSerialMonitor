@@ -31,6 +31,7 @@ private slots:
 	void onDisconnect();
 	void onConnected();
 	void onUnconnected();
+	void onSerialError(QSerialPort::SerialPortError error);
 
 private:
 	Ui::MainWindow *ui;

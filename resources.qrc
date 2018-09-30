@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>images/info icon.png</file>
+        <file>images/Tekkietorium.png</file>
+    </qresource>
+</RCC>

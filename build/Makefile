@@ -369,8 +369,7 @@ compiler_rcc_make_all: qrc_resources.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) qrc_resources.cpp
 qrc_resources.cpp: ../resources.qrc \
-		/usr/lib/qt5/bin/rcc \
-		../images/Tekkietorium.png
+		/usr/lib/qt5/bin/rcc
 	/usr/lib/qt5/bin/rcc -name resources ../resources.qrc -o qrc_resources.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h

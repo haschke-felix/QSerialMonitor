@@ -9,6 +9,7 @@ SerialConnect::SerialConnect(QWidget *parent) :
 {
 	ui->setupUi(this);
 	setWindowTitle("Select Serial Device");
+	setWindowIcon(QIcon(":/icons/images/USB Icon.png"));
 	print();
 	connect(ui->treeWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(onConnect()));
 	connect(ui->pushButtonConnect,SIGNAL(clicked()),this,SLOT(onConnect()));

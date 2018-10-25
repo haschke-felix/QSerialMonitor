@@ -57,6 +57,7 @@ public:
     QLabel *label;
     QPushButton *pushButton_connect;
     QPushButton *pushButton_disconnect;
+    QCheckBox *checkBox_show_tranmitted;
     QSpacerItem *horizontalSpacer;
     QPushButton *pushButton_clear;
     QMenuBar *menuBar;
@@ -174,6 +175,11 @@ public:
 
         horizontalLayout_4->addWidget(pushButton_disconnect);
 
+        checkBox_show_tranmitted = new QCheckBox(centralWidget);
+        checkBox_show_tranmitted->setObjectName(QStringLiteral("checkBox_show_tranmitted"));
+
+        horizontalLayout_4->addWidget(checkBox_show_tranmitted);
+
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_4->addItem(horizontalSpacer);
@@ -243,6 +249,7 @@ public:
         label->setText(QApplication::translate("MainWindow", "unconnected", Q_NULLPTR));
         pushButton_connect->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
         pushButton_disconnect->setText(QApplication::translate("MainWindow", "Disconnect", Q_NULLPTR));
+        checkBox_show_tranmitted->setText(QApplication::translate("MainWindow", "Show Transmitted", Q_NULLPTR));
         pushButton_clear->setText(QApplication::translate("MainWindow", "Clear", Q_NULLPTR));
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
         menuTools->setTitle(QApplication::translate("MainWindow", "Tools", Q_NULLPTR));

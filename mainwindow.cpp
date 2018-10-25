@@ -16,7 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	setWindowTitle("QSerialMonitor");
-	this->showMaximized();
+	showMaximized();
+	setWindowIcon(QIcon(":/icons/images/USB Icon.png"));
 
 	ui->checkBox_button->setAttribute(Qt::WA_TransparentForMouseEvents);
 	ui->checkBox_button->setFocusPolicy(Qt::NoFocus);
@@ -82,6 +83,16 @@ void MainWindow::onTransmitt()
 		return;
 	str.append('\n');
 	serial.write(str.toUtf8());
+	if(ui->checkBox_show_tranmitted->isChecked()){
+		Qt::GlobalColor col = Qt::blue;
+		QTextCharFormat tf, tf_old;
+		tf_old = tf = ui->plainTextEdit->currentCharFormat();
+		tf.setForeground(QBrush((Qt::GlobalColor)col));
+		ui->plainTextEdit->setCurrentCharFormat(tf);
+		ui->plainTextEdit->insertPlainText(str);
+		// restore color
+		ui->plainTextEdit->setCurrentCharFormat(tf_old);
+	}
 }
 
 void MainWindow::onLED_changed(bool state)

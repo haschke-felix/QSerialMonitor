@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
    ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	setWindowTitle("Modellbahnsteuerung IDE ALPHA");
+	setWindowTitle("QSerialMonitor");
 	this->showMaximized();
 
 	ui->checkBox_button->setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -48,12 +48,16 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 	delete ui;
+	disconnect(&serial,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(onSerialError(QSerialPort::SerialPortError)));
 	serial.close();
 }
 
 void MainWindow::SerialReceived(){
-	static QString str;
-	str.append(serial.readAll());
+	static QString str; // only for evaluation
+	QString read = serial.readAll();
+	ui->plainTextEdit->insertPlainText(read);
+
+	str.append(read);
 	auto values = str.split('\n');
 	str = values.last();
 	values.removeLast();
@@ -67,16 +71,15 @@ void MainWindow::SerialReceived(){
 		else if(s == "OFF"){
 			ui->checkBox_button->setCheckState(Qt::Unchecked);
 		}
-		ui->plainTextEdit->appendPlainText(s);
 	}
 }
 
 void MainWindow::onTransmitt()
 {
-	if(!serial.isOpen() || !serial.isWritable())
-		return;
 	QString str	= ui->lineEdit->text();
 	ui->lineEdit->clear();
+	if(!serial.isOpen() || !serial.isWritable())
+		return;
 	str.append('\n');
 	serial.write(str.toUtf8());
 }
@@ -146,11 +149,7 @@ void MainWindow::serialConnect()
 
 void MainWindow::onDisconnect()
 {
-	ui->label->setText(tr("No Connection"));
-	ui->label->setAutoFillBackground(true);
-	QPalette palette = ui->label->palette();
-	palette.setColor(ui->label->backgroundRole(), Qt::red);
-	ui->label->setPalette(palette);
+	onUnconnected();
 	if(serial.isOpen()){
 		serial.close();
 	}
@@ -175,6 +174,8 @@ void MainWindow::onUnconnected()
 
 void MainWindow::onSerialError(QSerialPort::SerialPortError error)
 {
+	if(error & QSerialPort::NoError)
+		return;
 	qDebug() << error;
 	onDisconnect();
 	if(error & QSerialPort::ResourceError){

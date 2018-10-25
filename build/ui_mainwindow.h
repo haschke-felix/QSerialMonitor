@@ -139,6 +139,8 @@ public:
 
         plainTextEdit = new QPlainTextEdit(centralWidget);
         plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
+        plainTextEdit->setFrameShadow(QFrame::Sunken);
+        plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
         plainTextEdit->setReadOnly(true);
 
         verticalLayout->addWidget(plainTextEdit);

@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -47,18 +48,15 @@ public:
     QHBoxLayout *horizontalLayout;
     QLineEdit *lineEdit;
     QPushButton *pushButton;
-    QHBoxLayout *horizontalLayout_3;
-    QCheckBox *checkBox_led;
-    QCheckBox *checkBox_button;
-    QSpacerItem *horizontalSpacer_2;
     QPlainTextEdit *plainTextEdit;
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_2;
     QLabel *label;
     QPushButton *pushButton_connect;
     QPushButton *pushButton_disconnect;
-    QCheckBox *checkBox_show_tranmitted;
+    QComboBox *comboBox_baud;
     QSpacerItem *horizontalSpacer;
+    QCheckBox *checkBox_show_tranmitted;
     QPushButton *pushButton_clear;
     QMenuBar *menuBar;
     QMenu *menuHelp;
@@ -116,33 +114,12 @@ public:
 
         verticalLayout->addLayout(horizontalLayout);
 
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        checkBox_led = new QCheckBox(centralWidget);
-        checkBox_led->setObjectName(QStringLiteral("checkBox_led"));
-
-        horizontalLayout_3->addWidget(checkBox_led);
-
-        checkBox_button = new QCheckBox(centralWidget);
-        checkBox_button->setObjectName(QStringLiteral("checkBox_button"));
-        checkBox_button->setCheckable(true);
-        checkBox_button->setTristate(false);
-
-        horizontalLayout_3->addWidget(checkBox_button);
-
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_3->addItem(horizontalSpacer_2);
-
-
-        verticalLayout->addLayout(horizontalLayout_3);
-
         plainTextEdit = new QPlainTextEdit(centralWidget);
         plainTextEdit->setObjectName(QStringLiteral("plainTextEdit"));
         plainTextEdit->setFrameShadow(QFrame::Sunken);
         plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
         plainTextEdit->setReadOnly(true);
+        plainTextEdit->setCenterOnScroll(true);
 
         verticalLayout->addWidget(plainTextEdit);
 
@@ -175,14 +152,19 @@ public:
 
         horizontalLayout_4->addWidget(pushButton_disconnect);
 
-        checkBox_show_tranmitted = new QCheckBox(centralWidget);
-        checkBox_show_tranmitted->setObjectName(QStringLiteral("checkBox_show_tranmitted"));
+        comboBox_baud = new QComboBox(centralWidget);
+        comboBox_baud->setObjectName(QStringLiteral("comboBox_baud"));
 
-        horizontalLayout_4->addWidget(checkBox_show_tranmitted);
+        horizontalLayout_4->addWidget(comboBox_baud);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_4->addItem(horizontalSpacer);
+
+        checkBox_show_tranmitted = new QCheckBox(centralWidget);
+        checkBox_show_tranmitted->setObjectName(QStringLiteral("checkBox_show_tranmitted"));
+
+        horizontalLayout_4->addWidget(checkBox_show_tranmitted);
 
         pushButton_clear = new QPushButton(centralWidget);
         pushButton_clear->setObjectName(QStringLiteral("pushButton_clear"));
@@ -243,12 +225,23 @@ public:
         actionOpen->setText(QApplication::translate("MainWindow", "Open", Q_NULLPTR));
         actionInfo->setText(QApplication::translate("MainWindow", "info", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "Send", Q_NULLPTR));
-        checkBox_led->setText(QApplication::translate("MainWindow", "LED", Q_NULLPTR));
-        checkBox_button->setText(QApplication::translate("MainWindow", "Button", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "Port:", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "unconnected", Q_NULLPTR));
         pushButton_connect->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
         pushButton_disconnect->setText(QApplication::translate("MainWindow", "Disconnect", Q_NULLPTR));
+        comboBox_baud->clear();
+        comboBox_baud->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "300 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "1200 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "2400 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "4800 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "9600 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "19200 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "38400 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "57600 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "74880 baud", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "115200 baud", Q_NULLPTR)
+        );
         checkBox_show_tranmitted->setText(QApplication::translate("MainWindow", "Show Transmitted", Q_NULLPTR));
         pushButton_clear->setText(QApplication::translate("MainWindow", "Clear", Q_NULLPTR));
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));

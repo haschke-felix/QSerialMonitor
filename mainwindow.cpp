@@ -19,11 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	showMaximized();
 	setWindowIcon(QIcon(":/icons/images/USB Icon.png"));
 
-	ui->checkBox_button->setAttribute(Qt::WA_TransparentForMouseEvents);
-	ui->checkBox_button->setFocusPolicy(Qt::NoFocus);
 	ui->label->setAutoFillBackground(true);
 
-	serial.setBaudRate(QSerialPort::Baud9600);
+	baud_	= QSerialPort::Baud9600;
+	ui->comboBox_baud->setCurrentText("9600 baud");
+
+	serial.setBaudRate(baud_);
 	serial.setDataBits(QSerialPort::Data8);
 	serial.setParity(QSerialPort::NoParity);
 	serial.setStopBits(QSerialPort::OneStop);
@@ -36,14 +37,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(&serial,SIGNAL(readyRead()),this,SLOT(SerialReceived()));
 	connect(ui->lineEdit,SIGNAL(returnPressed()),this,SLOT(onTransmitt()));
 	connect(ui->pushButton,SIGNAL(clicked(bool)),this,SLOT(onTransmitt()));
-	connect(ui->checkBox_led,SIGNAL(toggled(bool)),this,SLOT(onLED_changed(bool)));
 	connect(ui->pushButton_connect,SIGNAL(clicked(bool)),this,SLOT(serialConnect()));
 	connect(ui->pushButton_disconnect,SIGNAL(clicked(bool)),this,SLOT(onDisconnect()));
 	connect(ui->pushButton_clear,SIGNAL(clicked(bool)),this,SLOT(onClear()));
 	connect(&serial,SIGNAL(error(QSerialPort::SerialPortError)),this,SLOT(onSerialError(QSerialPort::SerialPortError)));
-
-	onLED_changed(false);
-	ui->checkBox_led->setChecked(false);
+	connect(ui->comboBox_baud,SIGNAL(currentIndexChanged(int)),this,SLOT(onBaudChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -54,25 +52,9 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::SerialReceived(){
-	static QString str; // only for evaluation
 	QString read = serial.readAll();
 	ui->plainTextEdit->insertPlainText(read);
-
-	str.append(read);
-	auto values = str.split('\n');
-	str = values.last();
-	values.removeLast();
-	for(QString s : values) {
-		if(s.contains("init",Qt::CaseInsensitive)){
-			ui->checkBox_led->setChecked(false);
-		}
-		else if(s == "ON"){
-			ui->checkBox_button->setCheckState(Qt::Checked);
-		}
-		else if(s == "OFF"){
-			ui->checkBox_button->setCheckState(Qt::Unchecked);
-		}
-	}
+	ui->plainTextEdit->ensureCursorVisible();
 }
 
 void MainWindow::onTransmitt()
@@ -92,14 +74,8 @@ void MainWindow::onTransmitt()
 		ui->plainTextEdit->insertPlainText(str);
 		// restore color
 		ui->plainTextEdit->setCurrentCharFormat(tf_old);
+		ui->plainTextEdit->ensureCursorVisible();
 	}
-}
-
-void MainWindow::onLED_changed(bool state)
-{
-	if(!serial.isOpen() || !serial.isWritable())
-		return;
-	serial.write((state?"ON\n":"OFF\n"));
 }
 
 void MainWindow::onClear()
@@ -185,7 +161,7 @@ void MainWindow::onUnconnected()
 
 void MainWindow::onSerialError(QSerialPort::SerialPortError error)
 {
-	if(error & QSerialPort::NoError)
+	if(error == QSerialPort::NoError)
 		return;
 	qDebug() << error;
 	onDisconnect();
@@ -193,7 +169,7 @@ void MainWindow::onSerialError(QSerialPort::SerialPortError error)
 		if(serial.isOpen())
 			serial.close();
 		QMessageBox box; //((QMessageBox::Critical, QString("Port not available"),QString("port %1 not available").arg(serial.portName()),QMessageBox::Retry | QMessageBox::Ok, btn);
-		box.setText(tr("An Error occured.\nport %1 not availale, device has been removed").arg(serial.portName()));
+		box.setText(tr("An Error occured on Port: %1\nprobably the device has been removed\nSoftware Statemend: %2").arg(serial.portName()).arg(serial.errorString()));
 		box.setWindowTitle(tr("Port not available"));
 		box.setIcon(QMessageBox::Critical);
 		box.addButton(tr("Cancel"),QMessageBox::DestructiveRole);
@@ -204,4 +180,18 @@ void MainWindow::onSerialError(QSerialPort::SerialPortError error)
 		}
 	}
 	return;
+}
+
+void MainWindow::onBaudChanged(){
+	int baud = ui->comboBox_baud->currentText().remove("baud").trimmed().toInt();
+	qDebug() << baud;
+	baud_ = QSerialPort::BaudRate(baud);
+	if(serial.isOpen() && serial.isWritable()){
+		serial.close();
+		serial.setBaudRate(baud_);
+		onConnected();
+		if(!serial.open(QIODevice::ReadWrite)){
+			onSerialError(serial.error());
+		}
+	}
 }

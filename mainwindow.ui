@@ -33,43 +33,6 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QCheckBox" name="checkBox_led">
-        <property name="text">
-         <string>LED</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBox_button">
-        <property name="text">
-         <string>Button</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="tristate">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </item>
-    <item>
      <widget class="QPlainTextEdit" name="plainTextEdit">
       <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
@@ -78,6 +41,9 @@
        <enum>QPlainTextEdit::WidgetWidth</enum>
       </property>
       <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="centerOnScroll">
        <bool>true</bool>
       </property>
      </widget>
@@ -125,10 +91,57 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_show_tranmitted">
-        <property name="text">
-         <string>Show Transmitted</string>
-        </property>
+       <widget class="QComboBox" name="comboBox_baud">
+        <item>
+         <property name="text">
+          <string>300 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1200 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2400 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4800 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>9600 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>19200 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>38400 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>57600 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>74880 baud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>115200 baud</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -143,6 +156,13 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox_show_tranmitted">
+        <property name="text">
+         <string>Show Transmitted</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_clear">

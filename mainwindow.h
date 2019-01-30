@@ -23,8 +23,6 @@ private slots:
 
 
 	void onTransmitt();
-	void onLED_changed(bool state);
-
 	void onClear();
 
 	void serialConnect();
@@ -33,10 +31,11 @@ private slots:
 	void onUnconnected();
 	void onSerialError(QSerialPort::SerialPortError error);
 
+	void onBaudChanged();
 private:
 	Ui::MainWindow *ui;
 	QSerialPort serial;
-
+	QSerialPort::BaudRate baud_;
 };
 
 #endif // MAINWINDOW_H

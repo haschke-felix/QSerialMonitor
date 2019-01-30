@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[14];
-    char stringdata0[169];
+    QByteArrayData data[13];
+    char stringdata0[163];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,23 +35,22 @@ QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
 QT_MOC_LITERAL(1, 11, 14), // "SerialReceived"
 QT_MOC_LITERAL(2, 26, 0), // ""
 QT_MOC_LITERAL(3, 27, 11), // "onTransmitt"
-QT_MOC_LITERAL(4, 39, 13), // "onLED_changed"
-QT_MOC_LITERAL(5, 53, 5), // "state"
-QT_MOC_LITERAL(6, 59, 7), // "onClear"
-QT_MOC_LITERAL(7, 67, 13), // "serialConnect"
-QT_MOC_LITERAL(8, 81, 12), // "onDisconnect"
-QT_MOC_LITERAL(9, 94, 11), // "onConnected"
-QT_MOC_LITERAL(10, 106, 13), // "onUnconnected"
-QT_MOC_LITERAL(11, 120, 13), // "onSerialError"
-QT_MOC_LITERAL(12, 134, 28), // "QSerialPort::SerialPortError"
-QT_MOC_LITERAL(13, 163, 5) // "error"
+QT_MOC_LITERAL(4, 39, 7), // "onClear"
+QT_MOC_LITERAL(5, 47, 13), // "serialConnect"
+QT_MOC_LITERAL(6, 61, 12), // "onDisconnect"
+QT_MOC_LITERAL(7, 74, 11), // "onConnected"
+QT_MOC_LITERAL(8, 86, 13), // "onUnconnected"
+QT_MOC_LITERAL(9, 100, 13), // "onSerialError"
+QT_MOC_LITERAL(10, 114, 28), // "QSerialPort::SerialPortError"
+QT_MOC_LITERAL(11, 143, 5), // "error"
+QT_MOC_LITERAL(12, 149, 13) // "onBaudChanged"
 
     },
     "MainWindow\0SerialReceived\0\0onTransmitt\0"
-    "onLED_changed\0state\0onClear\0serialConnect\0"
-    "onDisconnect\0onConnected\0onUnconnected\0"
-    "onSerialError\0QSerialPort::SerialPortError\0"
-    "error"
+    "onClear\0serialConnect\0onDisconnect\0"
+    "onConnected\0onUnconnected\0onSerialError\0"
+    "QSerialPort::SerialPortError\0error\0"
+    "onBaudChanged"
 };
 #undef QT_MOC_LITERAL
 
@@ -71,24 +70,24 @@ static const uint qt_meta_data_MainWindow[] = {
  // slots: name, argc, parameters, tag, flags
        1,    0,   59,    2, 0x08 /* Private */,
        3,    0,   60,    2, 0x08 /* Private */,
-       4,    1,   61,    2, 0x08 /* Private */,
-       6,    0,   64,    2, 0x08 /* Private */,
-       7,    0,   65,    2, 0x08 /* Private */,
-       8,    0,   66,    2, 0x08 /* Private */,
-       9,    0,   67,    2, 0x08 /* Private */,
-      10,    0,   68,    2, 0x08 /* Private */,
-      11,    1,   69,    2, 0x08 /* Private */,
+       4,    0,   61,    2, 0x08 /* Private */,
+       5,    0,   62,    2, 0x08 /* Private */,
+       6,    0,   63,    2, 0x08 /* Private */,
+       7,    0,   64,    2, 0x08 /* Private */,
+       8,    0,   65,    2, 0x08 /* Private */,
+       9,    1,   66,    2, 0x08 /* Private */,
+      12,    0,   69,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Bool,    5,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 12,   13,
+    QMetaType::Void, 0x80000000 | 10,   11,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -101,13 +100,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->SerialReceived(); break;
         case 1: _t->onTransmitt(); break;
-        case 2: _t->onLED_changed((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 3: _t->onClear(); break;
-        case 4: _t->serialConnect(); break;
-        case 5: _t->onDisconnect(); break;
-        case 6: _t->onConnected(); break;
-        case 7: _t->onUnconnected(); break;
-        case 8: _t->onSerialError((*reinterpret_cast< QSerialPort::SerialPortError(*)>(_a[1]))); break;
+        case 2: _t->onClear(); break;
+        case 3: _t->serialConnect(); break;
+        case 4: _t->onDisconnect(); break;
+        case 5: _t->onConnected(); break;
+        case 6: _t->onUnconnected(); break;
+        case 7: _t->onSerialError((*reinterpret_cast< QSerialPort::SerialPortError(*)>(_a[1]))); break;
+        case 8: _t->onBaudChanged(); break;
         default: ;
         }
     }
